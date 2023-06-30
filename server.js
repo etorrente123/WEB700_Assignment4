@@ -1,3 +1,15 @@
+/*********************************************************************************
+*  WEB700 – Assignment 04
+*  I declare that this assignment is my own work in accordance with Seneca  Academic Policy.  No part 
+*  of this assignment has been copied manually or electronically from any other source 
+*  (including 3rd party web sites) or distributed to other students.
+* 
+*  Name: Eleonor Rose Torrente Student ID: 118492222 Date: 30 June 2023
+*
+*  Online (Cycliic) Link:
+*
+********************************************************************************/ 
+
 //Pang imports mo to
 let express = require("express");
 let HTTP_PORT = process.env.PORT || 8080;
