@@ -66,7 +66,7 @@
                                     </div>
                                   </div><br>
                                   <div class="academic-info-row"><b style="color:black !important; margin-right: 80px;">College Employment:</b> <b style="color:black !important; margin-right: 80px;">Enrollment Status:</b> <b style="color:black !important;">Enrolled in Course:</b></div>
-                                  <div class="buttons-info-row"><input class="w3-check" type="checkbox" checked="checked" id="TA" value="True"> <label style="margin-right: 80px;">Teaching Assistant</label> <input class="w3-radio" type="radio" name="status" value="Full Time" checked id="status"><label>Full Time</label>
+                                  <div class="buttons-info-row"><input class="w3-check" type="checkbox" checked="checked" id="TAs" name="TA" value="True"> <label style="margin-right: 80px;">Teaching Assistant</label> <input class="w3-radio" type="radio" name="status" value="Full Time" checked id="status"><label>Full Time</label>
                                     <input class="w3-radio" type="radio" name="status" value="Part Time" checked id="status"><label style="margin-right: 106px;">Part Time</label>   
                                     <select class="w3-select w3-border" name="course" style="width: 30% !important;" id="course" name="course">
                                         <option value="" disabled selected>Choose your option</option>
@@ -97,7 +97,7 @@
 			</div>
 		</div>
     <script>
-      var tascb = document.getElementbyId('TA');
+      var tascb = document.getElementbyId('TAs');
 
       tascb.addEventListener('change', () => {
         tascb.value = tascb.checked ? 'True' : 'False';
