@@ -1,5 +1,5 @@
 /*********************************************************************************
-*  WEB700 – Assignment 04
+*  WEB700 – Assignment 05
 *  I declare that this assignment is my own work in accordance with Seneca  Academic Policy.  No part 
 *  of this assignment has been copied manually or electronically from any other source 
 *  (including 3rd party web sites) or distributed to other students.
@@ -25,12 +25,11 @@ eli.use(express.urlencoded({extended: true}));
 eli.engine('hbs', exphbs.engine({ extname: '.hbs', defaultLayout: path.join(__dirname, 'views/layouts/main') }));
 eli.set('view engine', 'hbs');
 
-
 eli.use(function(req, res, next) {
     let route = req.path.substring(1);
     eli.locals.activeRoute = "/" + (isNaN(route.split('/')[1]) ? route.replace(/\/(?!.*)/, "") : route.replace(/\/(.*)/, ""));
     next();
-  });
+});
 
 const hbs = exphbs.create({
     helpers: {
@@ -45,14 +44,15 @@ const hbs = exphbs.create({
     }
 });
 
-  
 eli.engine('hbs', hbs.engine);  
 
-collegeData.initialize()
+const sequelize = require('./modules/collegeData').sequelize;
+
+collegeData.initialize(sequelize, collegeData.Student, collegeData.Course)
     .then(() => {
         eli.get('/', (req, res) => {
             res.render('home');
-          });
+        });
         
         eli.get('/students', (req, res) => {
             collegeData.getAllStudents()
@@ -68,27 +68,27 @@ collegeData.initialize()
             res.render('addStudent');
           });
 
-        eli.post("/students/add", (req, res)=>{
+        eli.post("/students/add", (req, res) => {
             collegeData.addStudent(req.body)
-            .then(()=>{
-                res.redirect("/students")
-            })
-            .catch((error)=>{
-                console.error(error)
-                res.redirect('ERROR' + error);
-            })
+                .then(() => {
+                    res.redirect("/students")
+                })
+                .catch((error) => {
+                    console.error(error)
+                    res.redirect('ERROR' + error);
+                })
         })
         eli.post("/students/update", (req, res) => {
           collegeData
-            .updateStudent({ studentNum: parseInt(req.body.studentNum), ...req.body })
-            .then((updatedStudent) => {
-              res.redirect("/students");
-            })
-            .catch((error) => {
-              console.error(error);
-              res.redirect("/students");
-            });
-        });
+              .updateStudent({ studentNum: parseInt(req.body.studentNum), ...req.body })
+              .then((updatedStudent) => {
+                  res.redirect("/students");
+              })
+              .catch((error) => {
+                  console.error(error);
+                  res.redirect("/students");
+              });
+      });
         
         eli.get("/tas", (req, res) => {
             collegeData.getTAs()
@@ -110,14 +110,71 @@ collegeData.initialize()
               });
         });
 
+        eli.get('/courses/add', (req, res) => {
+          res.render('addCourse');
+        });
+        eli.post("/courses/add", (req, res) => {
+          collegeData.addCourse(req.body)
+              .then(() => {
+                  res.redirect("/courses")
+              })
+              .catch((error) => {
+                  console.error(error)
+                  res.redirect('ERROR' + error);
+              })
+        })
+
+        eli.post("/courses/update/:id", (req, res) => {
+          const courseId = parseInt(req.params.id);
+          collegeData
+            .updateCourse({ courseId, ...req.body })
+            .then((updatedCourse) => {
+              res.redirect("/courses");
+            })
+            .catch((error) => {
+              console.error(error);
+              res.redirect("/courses");
+            });
+        });
+
+        eli.get('/courses/update/:courseId', (req, res) => {
+          const courseId = req.params.courseId;
+          collegeData.getCourseById(courseId)
+            .then((course) => {
+              if (course) {
+                res.render('updateCourse', { course });
+              } else {
+                res.render('courses', { message: 'Course not found' });
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+              res.render('courses', { message: 'Error retrieving course' });
+            });
+        });
+
+        
+
+        eli.post("/courses/delete/:courseId", (req, res) => {
+          const courseId = parseInt(req.params.courseId);
+          collegeData.deleteCourse(courseId)
+              .then(() => {
+                  res.redirect("/courses");
+              })
+              .catch((error) => {
+                  console.error(error);
+                  res.redirect("/courses");
+              });
+      });
+
         eli.get('/courses/:id', (req, res) => {
-            const courseId = req.params.id;
-            collegeData.getCourseById(courseId)
+          const courseId = req.params.id;
+          collegeData.getCourseById(courseId)
               .then((course) => {
-                res.render('course', { course });
+                  res.render('course', { course });
               })
               .catch((err) => {
-                res.render('course', { message: "no results" });
+                  res.render('course', { message: "no results" });
               });
         });
           
@@ -133,6 +190,53 @@ collegeData.initialize()
                     res.render('student', { message: "no results" });
                 });
         });
+
+        eli.post("/students/update", (req, res) => {
+          collegeData
+              .updateStudent({ studentNum: parseInt(req.body.studentNum), ...req.body })
+              .then((updatedStudent) => {
+                  res.redirect("/students");
+              })
+              .catch((error) => {
+                  console.error(error);
+                  res.redirect("/students");
+              });
+      });
+
+        eli.post("/students/delete/:studentNum", (req, res) => {
+          const studentNum = parseInt(req.params.studentNum);
+          collegeData.deleteStudent(studentNum)
+              .then(() => {
+                  res.redirect("/students");
+              })
+              .catch((error) => {
+                  console.error(error);
+                  res.redirect("/students");
+              });
+      });
+
+        eli.get("/students/delete/:studentNum", (req, res) => {
+          const studentNum = parseInt(req.params.studentNum);
+          collegeData.deleteStudent(studentNum)
+              .then(() => {
+                  res.redirect("/students");
+              })
+              .catch((error) => {
+                  console.error(error);
+                  res.redirect("/students");
+              });
+      });
+
+        eli.post("/students/delete", (req, res) => {
+          collegeData.deleteStudent(parseInt(req.body.studentNum))
+              .then(() => {
+                  res.redirect("/students");
+              })
+              .catch((error) => {
+                  console.error(error);
+                  res.redirect("/students");
+              });
+      });
 
         eli.get("/theme.css", (req,res) => {
             res.sendFile(path.join(__dirname, "/css/theme.css"))

@@ -10,11 +10,17 @@
             <tbody>
                 {{#each students}}
                 <tr>
-                <td>{{this.firstName}}</td>
-                <td>{{this.lastName}}</td>
+                    <td>{{this.firstName}}</td>
+                    <td>{{this.lastName}}</td>
                 </tr>
                 {{/each}}
             </tbody>
         </table>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-12">
+        <a href="/students/add" class="btn btn-success float-right">Add New Student</a>
     </div>
 </div>

@@ -13,7 +13,11 @@
   "dependencies": {
     "express": "^4.18.2",
     "express-handlebars": "^7.1.0",
-    "install": "^0.13.0"
+    "handlebars": "^4.7.8",
+    "install": "^0.13.0",
+    "pg": "^8.11.2",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.32.1"
   },
   "devDependencies": {
     "nodemon": "^2.0.22"
