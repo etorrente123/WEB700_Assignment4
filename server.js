@@ -4,7 +4,7 @@
 *  of this assignment has been copied manually or electronically from any other source 
 *  (including 3rd party web sites) or distributed to other students.
 * 
-*  Name: Eleonor Rose Torrente Student ID: 118492222 Date: 7 July 2023
+*  Name: Eleonor Rose Torrente Student ID: 118492222 Date: 4 August 2023
 *
 *  Online (Cycliic) Link: https://difficult-pear-cricket.cyclic.app/
 *
@@ -64,9 +64,13 @@ collegeData.initialize(sequelize, collegeData.Student, collegeData.Course)
               });
           });
 
-        eli.get('/students/add', (req, res) => {
-            res.render('addStudent');
-          });
+        eli.get("/students/add", (req, res) => {
+            collegeData.getCourses().then((courses) => {
+                res.render("addStudent", { courses: courses });
+            }).catch(() => {
+                res.render("addStudent", { courses: [] });
+            });
+        });
 
         eli.post("/students/add", (req, res) => {
             collegeData.addStudent(req.body)

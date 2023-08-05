@@ -1,5 +1,6 @@
 <h2>Add Student</h2>
 <form method="POST" action="/students/add">
+    <!-- Student Information -->
     <div class="form-group">
         <label for="firstName">First Name</label>
         <input type="text" class="form-control" name="firstName" id="firstName">
@@ -33,8 +34,19 @@
         <select class="form-control" name="status" id="status">
             <option value="Full Time">Full Time</option>
             <option value="Part Time">Part time</option>
-
         </select>
     </div>
+
+    <!-- Course Information -->
+    <div class="form-group">
+        <label for="course">Course</label>
+        <select class="form-control" name="course" id="course">
+            <option value="">Select Course</option>
+            {{#each courses}}
+                <option value="{{courseId}}">{{courseCode}}</option>
+            {{/each}}
+        </select>
+    </div>
+
     <button type="submit" class="btn btn-primary">Add Student</button>
 </form>
